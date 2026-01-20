@@ -1,0 +1,110 @@
+.content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-top: 100px;
+}
+
+.row {
+  justify-content: center;
+}
+:root {
+  --primary-color: #007bff;
+  --light-blue: #e3f2fd;
+  --white: #ffffff;
+  --text-color: #1a1a1a;
+  --card-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+.top-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: var(--white);
+  padding: 12px 40px;
+  border-bottom: 1px solid #dee2e6;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.top-nav img {
+  height: 120px;
+  width: auto;
+  margin-left: 60px;
+}
+
+.top-nav .nav-link {
+  color: var(--text-color);
+  font-weight: 500;
+  padding: 8px 16px;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+}
+
+.top-nav .nav-link:hover {
+  background-color: var(--light-blue);
+  color: var(--primary-color);
+}
+
+.top-nav .nav-link.active {
+  background-color: var(--primary-color);
+  color: var(--white) !important;
+}
+.content {
+  max-width: 1200px;
+  margin: 80px auto 40px;
+  padding: 0 20px;
+  text-align: center;
+}
+
+.content h1 {
+  font-size: 2.2rem;
+  font-weight: 600;
+  color: var(--text-color);
+  margin-bottom: 40px;
+}
+.card {
+  border: none;
+  border-radius: 12px;
+  background-color: var(--white);
+  color: var(--text-color);
+  box-shadow: var(--card-shadow);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+}
+
+.card .card-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--primary-color);
+}
+
+.card .btn {
+  margin-top: 10px;
+  font-weight: 500;
+  background-color: var(--primary-color);
+  color: var(--white);
+  border: none;
+}
+
+.card .btn:hover {
+  background-color: #0056b3;
+}
+@media (max-width: 768px) {
+  .top-nav {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .top-nav ul {
+    width: 100%;
+    justify-content: flex-start !important;
+  }
+}

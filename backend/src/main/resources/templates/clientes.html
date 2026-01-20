@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Painel de Clientes</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css"/>
+    <link rel="stylesheet" href="assets/menu.css"/>
+</head>
+<body class="bg-light">
+<div id="navbarContainer"></div>
+<img src="assets/img/service.png" alt="">
+<div class="container py-5">
+    <h2 class="mb-4 text-center">Painel Administrativo - Clientes</h2>
+
+    <!-- Formulário integrado ao Spring -->
+    <form th:action="@{/clientes}" th:object="${cliente}" method="post" class="row g-3 mb-4">
+        <input type="hidden" th:field="*{id}" />
+
+        <div class="col-md-3">
+            <label th:for="*{nome}" class="form-label">Nome</label>
+            <input type="text" th:field="*{nome}" class="form-control" required />
+        </div>
+
+        <div class="col-md-3">
+            <label th:for="*{cpf}" class="form-label">CPF</label>
+            <input type="text" th:field="*{cpf}" class="form-control" maxlength="14" required />
+        </div>
+
+        <div class="col-md-4">
+            <label th:for="*{endereco}" class="form-label">Endereço</label>
+            <input type="text" th:field="*{endereco}" class="form-control" required />
+        </div>
+
+        <div class="col-md-2">
+            <label th:for="*{telefone}" class="form-label">Telefone</label>
+            <input type="tel" th:field="*{telefone}" class="form-control" required />
+        </div>
+
+        <div class="col-md-12 text-end">
+            <button type="submit" class="btn btn-primary">Salvar Cliente</button>
+        </div>
+    </form>
+
+    <!-- Tabela -->
+    <table class="table table-bordered table-striped">
+        <thead class="table-dark">
+        <tr>
+            <th>Nome</th>
+            <th>CPF</th>
+            <th>Endereço</th>
+            <th>Telefone</th>
+            <th>Ações</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="c : ${clientes}">
+            <td th:text="${c.nome}"></td>
+            <td th:text="${c.cpf}"></td>
+            <td th:text="${c.endereco}"></td>
+            <td th:text="${c.telefone}"></td>
+            <td>
+                <a th:href="@{/clientes/editar/{id}(id=${c.id})}" class="btn btn-sm btn-outline-warning me-2" title="Editar">
+                    <i class="bi bi-pencil-fill"></i>
+                </a>
+                <a th:href="@{/clientes/deletar/{id}(id=${c.id})}" class="btn btn-sm btn-outline-danger" title="Excluir">
+                    <i class="bi bi-trash-fill"></i>
+                </a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    fetch("assets/components/navbar.html")
+      .then((res) => res.text())
+      .then((html) => {
+        document.getElementById("navbarContainer").innerHTML = html;
+        document.getElementById("logoNav").src = "assets/images/service.png";
+      });
+</script>
+</body>
+</html>
