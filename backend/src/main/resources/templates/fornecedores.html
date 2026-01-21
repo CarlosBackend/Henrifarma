@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Painel de Fornecedores</title>
+  <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+  />
+  <link
+          rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css"
+  />
+  <link rel="stylesheet" href="assets/menu.css" />
+</head>
+<body class="bg-light">
+<div id="navbarContainer"></div>
+
+<div class="container py-5">
+  <h2 class="mb-4 text-center">Painel Administrativo - Fornecedores</h2>
+  <form id="formFornecedor" class="row g-3 mb-4">
+    <input type="hidden" id="fornecedorId" />
+
+    <div class="col-md-6">
+      <label for="nomeEmpresa" class="form-label">Nome da Empresa</label>
+      <input type="text" class="form-control" id="nomeEmpresa" required />
+    </div>
+
+    <div class="col-md-6">
+      <label for="cnpj" class="form-label">CNPJ</label>
+      <input type="text" class="form-control" id="cnpj" required />
+    </div>
+
+    <div class="col-md-4">
+      <label for="contato" class="form-label">Pessoa de Contato</label>
+      <input type="text" class="form-control" id="contato" />
+    </div>
+
+    <div class="col-md-4">
+      <label for="telefone" class="form-label">Telefone</label>
+      <input type="tel" class="form-control" id="telefone" />
+    </div>
+
+    <div class="col-md-4 align-self-end text-end">
+      <button type="submit" class="btn btn-primary w-100">
+        Salvar Fornecedor
+      </button>
+    </div>
+  </form>
+
+  <table class="table table-bordered table-striped">
+    <thead class="table-dark">
+    <tr>
+      <th>Empresa</th>
+      <th>CNPJ</th>
+      <th>Contato</th>
+      <th>Telefone</th>
+      <th>Ações</th>
+    </tr>
+    </thead>
+    <tbody id="tabelaFornecedores"></tbody>
+  </table>
+
+  <div
+          class="modal fade"
+          id="confirmDeleteModal"
+          tabindex="-1"
+          aria-labelledby="confirmDeleteLabel"
+          aria-hidden="true"
+  >
+    <div class="modal-dialog modal-sm modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="confirmDeleteLabel">
+            Confirmar exclusão
+          </h5>
+          <button
+                  type="button"
+                  class="btn-close"
+                  data-bs-dismiss="modal"
+                  aria-label="Fechar"
+          ></button>
+        </div>
+        <div class="modal-body">
+          Tem certeza que deseja excluir este fornecedor?
+        </div>
+        <div class="modal-footer">
+          <button
+                  type="button"
+                  class="btn btn-secondary btn-sm"
+                  data-bs-dismiss="modal"
+          >
+            Cancelar
+          </button>
+          <button
+                  type="button"
+                  id="confirmDeleteBtn"
+                  class="btn btn-danger btn-sm"
+          >
+            Excluir
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+  const form = document.getElementById("formFornecedor");
+  const tabela = document.getElementById("tabelaFornecedores");
+
+  function carregarFornecedores() {
+    const fornecedores = JSON.parse(
+      localStorage.getItem("fornecedores") || "[]"
+    );
+    tabela.innerHTML = "";
+    fornecedores.forEach((f, index) => {
+      const row = document.createElement("tr");
+      row.innerHTML = `
+        <td>${f.nomeEmpresa}</td>
+        <td>${f.cnpj}</td>
+        <td>${f.contato}</td>
+        <td>${f.telefone}</td>
+        <td>
+          <button class="btn btn-sm btn-outline-warning me-2" onclick="editarFornecedor(${index})" title="Editar">
+            <i class="bi bi-pencil-fill"></i>
+          </button>
+          <button class="btn btn-sm btn-outline-danger" onclick="confirmarExclusao(${index})" title="Excluir">
+            <i class="bi bi-trash-fill"></i>
+          </button>
+        </td>
+      `;
+      tabela.appendChild(row);
+    });
+  }
+
+  function editarFornecedor(index) {
+    const fornecedores = JSON.parse(
+      localStorage.getItem("fornecedores") || "[]"
+    );
+    const f = fornecedores[index];
+    document.getElementById("fornecedorId").value = index;
+    document.getElementById("nomeEmpresa").value = f.nomeEmpresa;
+    document.getElementById("cnpj").value = f.cnpj;
+    document.getElementById("contato").value = f.contato;
+    document.getElementById("telefone").value = f.telefone;
+  }
+
+  function excluirFornecedor(index) {
+    const fornecedores = JSON.parse(
+      localStorage.getItem("fornecedores") || "[]"
+    );
+    fornecedores.splice(index, 1);
+    localStorage.setItem("fornecedores", JSON.stringify(fornecedores));
+    carregarFornecedores();
+  }
+
+  // --------------------------------------------------
+  // Confirmação via Modal
+  // --------------------------------------------------
+  let _deleteIndex = null;
+
+  function confirmarExclusao(index) {
+    _deleteIndex = index;
+    const modalEl = document.getElementById("confirmDeleteModal");
+    const modal = new bootstrap.Modal(modalEl);
+    modal.show();
+  }
+
+  document.addEventListener("DOMContentLoaded", function () {
+    // Ao carregar, conectar o botão confirmar do modal
+    const confirmBtn = document.getElementById("confirmDeleteBtn");
+    if (confirmBtn) {
+      confirmBtn.addEventListener("click", function () {
+        if (_deleteIndex !== null) {
+          excluirFornecedor(_deleteIndex);
+          _deleteIndex = null;
+          const modalEl = document.getElementById("confirmDeleteModal");
+          const modal = bootstrap.Modal.getInstance(modalEl);
+          if (modal) modal.hide();
+        }
+      });
+    }
+  });
+
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
+    const fornecedores = JSON.parse(
+      localStorage.getItem("fornecedores") || "[]"
+    );
+    const id = document.getElementById("fornecedorId").value;
+    const novoFornecedor = {
+      nomeEmpresa: document.getElementById("nomeEmpresa").value,
+      cnpj: document.getElementById("cnpj").value,
+      contato: document.getElementById("contato").value,
+      telefone: document.getElementById("telefone").value,
+    };
+
+    if (id === "") {
+      fornecedores.push(novoFornecedor);
+    } else {
+      fornecedores[id] = novoFornecedor;
+    }
+
+    localStorage.setItem("fornecedores", JSON.stringify(fornecedores));
+    form.reset();
+    document.getElementById("fornecedorId").value = "";
+    carregarFornecedores();
+  });
+
+  document.addEventListener("DOMContentLoaded", carregarFornecedores);
+</script>
+<script>
+  // Este bloco mantém a lógica de carregamento da navbar
+  fetch("assets/components/navbar.html")
+    .then((res) => res.text())
+    .then((html) => {
+      document.getElementById("navbarContainer").innerHTML = html;
+      // Se o navbar.html tem um elemento com ID 'logoNav', atualize a imagem.
+      // Caso contrário, remova ou ajuste a linha abaixo.
+      const logo = document.getElementById("logoNav");
+      if (logo) logo.src = "assets/images/supplier (1).png"; // Imagem específica para fornecedores
+    });
+</script>
+</body>
+</html>
