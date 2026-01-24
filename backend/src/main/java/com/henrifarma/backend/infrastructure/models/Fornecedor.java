@@ -12,7 +12,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-@Table(name = "fornecedor")
+@Table(name = "fornecedores")
 public class Fornecedor {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,7 +22,7 @@ public class Fornecedor {
     @Column(name = "cnpj")
     private String cnpj;
     @Column(name = "PessoaContato")
-    private String PessoaContato;
+    private String pessoaContato;
     @Column(name = "telefone")
     private String telefone;
 }

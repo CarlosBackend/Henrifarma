@@ -1,7 +1,7 @@
 package com.henrifarma.backend.infrastructure.models;
+
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.*;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
@@ -10,15 +10,16 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-@Table(name = "funcionarios")
-public class Funcionario {
+@Table(name = "itens_venda")
+public class ItemVenda {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(name = "nome")
-    private String nome;
-    @Column(name = "cpf")
-    private String cpf;
-    @Column(name = "cargo")
-    private Cargos cargo;
+    private Integer quantidade;
+    private Double valor;
+    @ManyToOne
+    private Produto produto;
+    @ManyToOne
+    @JoinColumn(name = "venda_id")
+    private Venda venda;
 }

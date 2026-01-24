@@ -14,6 +14,14 @@ public class FornecedorService {
     }
 
     public void salvarOuAtualizar(Fornecedor fornecedor) {
+        if (fornecedor.getId() != null) {
+            Fornecedor existente = fornecedorRepository.findById(fornecedor.getId()).orElse(null);
+            existente.setNome(fornecedor.getNome());
+            existente.setCnpj(fornecedor.getCnpj());
+            existente.setPessoaContato(fornecedor.getPessoaContato());
+            existente.setTelefone(fornecedor.getTelefone());
+            fornecedorRepository.save(existente);
+        }
         fornecedorRepository.save(fornecedor);
     }
     public Fornecedor buscarPorId(Long id) {

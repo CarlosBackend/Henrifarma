@@ -4,9 +4,7 @@ import com.henrifarma.backend.infrastructure.models.Funcionario;
 import com.henrifarma.backend.infrastructure.services.FuncionarioService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping("/funcionarios")
@@ -34,7 +32,8 @@ public class FuncionarioController {
         funcionarioService.remover(id);
         return "redirect:/funcionarios";
     }
-    public String salvar(Funcionario funcionario){
+    @PostMapping("/salvar")
+    public String salvar(@ModelAttribute Funcionario funcionario){
         funcionarioService.salvarOuAtualizar(funcionario);
         return "redirect:/funcionarios";
     }

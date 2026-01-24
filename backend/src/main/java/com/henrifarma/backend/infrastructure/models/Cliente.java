@@ -10,7 +10,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-@Table(name = "cliente")
+@Table(name = "clientes")
 public class Cliente {
     @Id
     @Column(name = "id")
