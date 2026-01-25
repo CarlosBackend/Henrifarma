@@ -2,8 +2,6 @@ package com.henrifarma.backend.infrastructure.models;
 
 import jakarta.persistence.*;
 import lombok.*;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Entity
 @AllArgsConstructor

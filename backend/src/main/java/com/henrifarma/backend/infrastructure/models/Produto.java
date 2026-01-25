@@ -16,7 +16,7 @@ import java.time.LocalDate;
 public class Produto {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
     @Column(name = "nome")
     private String nome;
     @Column(name = "descricao")

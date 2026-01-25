@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="pt-BR"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Vendas</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+          rel="stylesheet">
+</head>
+<body class="bg-light">
+
+<div class="container mt-5">
+
+    <h2 class="mb-4 text-center">Cadastro de Vendas</h2>
+
+    <!-- FORMULÁRIO -->
+    <form th:action="@{/vendas/salvar}"
+          th:object="${venda}"
+          method="post"
+          class="row g-3">
+
+        <input type="hidden" th:field="*{id}"/>
+
+        <!-- CLIENTE -->
+        <div class="col-md-4">
+            <label class="form-label">Cliente</label>
+            <select class="form-select" th:field="*{cliente.id}" required>
+                <option value="">Selecione</option>
+                <option th:each="c : ${clientes}"
+                        th:value="${c.id}"
+                        th:text="${c.nome}">
+                </option>
+            </select>
+        </div>
+
+        <!-- PRODUTO -->
+        <div class="col-md-4">
+            <label class="form-label">Produto</label>
+            <select class="form-select"
+                    th:field="*{itens[0].produto.id}"
+                    required>
+                <option value="">Selecione</option>
+                <option th:each="p : ${produtos}"
+                        th:value="${p.id}"
+                        th:text="${p.nome}">
+                </option>
+            </select>
+        </div>
+
+        <!-- VALOR -->
+        <div class="col-md-2">
+            <label class="form-label">Valor</label>
+            <input type="number"
+                   step="0.01"
+                   class="form-control"
+                   th:field="*{itens[0].valor}"
+                   required>
+        </div>
+
+        <!-- QUANTIDADE -->
+        <div class="col-md-2">
+            <label class="form-label">Quantidade</label>
+            <input type="number"
+                   class="form-control"
+                   th:field="*{itens[0].quantidade}"
+                   required>
+        </div>
+
+        <!-- DATA -->
+        <div class="col-md-3">
+            <label class="form-label">Data</label>
+            <input type="date"
+                   class="form-control"
+                   th:field="*{data}"
+                   required>
+        </div>
+
+        <div class="col-md-3 d-flex align-items-end">
+            <button type="submit"
+                    class="btn btn-primary w-100">
+                Salvar Venda
+            </button>
+        </div>
+
+    </form>
+
+    <!-- TABELA -->
+    <hr class="my-5">
+
+    <h4 class="mb-3">Vendas Cadastradas</h4>
+
+    <table class="table table-bordered table-striped">
+        <thead class="table-dark">
+        <tr>
+            <th>Cliente</th>
+            <th>Produto</th>
+            <th>Valor</th>
+            <th>Qtd</th>
+            <th>Data</th>
+            <th>Ações</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="v : ${vendas}">
+            <td th:text="${v.cliente.nome}"></td>
+            <td>
+                <span th:each="item : ${v.itens}" th:text="${item.produto != null ? item.produto.nome : ''}"></span>
+            </td>
+            <td>
+                <span th:each="item : ${v.itens}" th:text="${item.valor}"></span>
+            </td>
+            <td>
+                <span th:each="item : ${v.itens}" th:text="${item.quantidade}"></span>
+            </td>
+            <td th:text="${v.data}"></td>
+            <td>
+                <a th:href="@{/vendas/editar/{id}(id=${v.id})}" class="btn btn-sm btn-warning">Editar</a>
+                <a th:href="@{/vendas/deletar/{id}(id=${v.id})}" class="btn btn-sm btn-danger">Excluir</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+</div>
+
+</body>
+</html>
